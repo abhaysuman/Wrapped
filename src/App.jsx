@@ -510,7 +510,7 @@ const slides = [
     bg: '#e94560',
     content: () => (
       <SlideLayout bgImage="/bg-words.jpg" color="#4cc9f0">
-        <motion.h2 variants={textVariant} initial="hidden" animate="visible">Vibe Check</motion.h2>
+        <motion.h2 variants={textVariant} initial="hidden" animate="visible">Most used words this year</motion.h2>
         
         <div className="word-cloud">
           {data?.top_words && data.top_words.map((item, index) => (
@@ -664,7 +664,7 @@ const slides = [
     id: 'outro',
     bg: '#000',
     content: () => (
-      <SlideLayout bgImage="/bg-outro.jpg" opacity={0.6} color="#e91e63">
+      <SlideLayout bgImage="/collage.jpg" opacity={0.6} color="#e91e63">
         <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1 }}>
            <Heart size={80} fill="#fff" />
         </motion.div>
