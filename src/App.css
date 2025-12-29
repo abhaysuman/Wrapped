@@ -1,18 +1,68 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
 
-body, html {
+/* --- 1. GLOBAL RESET (CRITICAL FOR MOBILE) --- */
+* {
+  box-sizing: border-box;
+}
+
+body, html, #root {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
-  overflow: hidden;
-  font-family: 'Inter', sans-serif;
+  /* Forces the app to fill the screen exactly, ignoring address bars */
+  height: 100dvh; 
+  overflow: hidden; /* Prevents scrollbars on the main window */
   background-color: #000;
+  font-family: 'Inter', sans-serif;
   color: white;
 }
 
-/* --- 1. EFFECTS --- */
-/* Film Grain Overlay */
+/* --- 2. LAYOUT --- */
+.app-container {
+  width: 100vw; 
+  height: 100dvh; /* Ensures the container matches the body */
+  position: relative; 
+  overflow: hidden;
+  display: flex;       /* Ensures children fill the space */
+  flex-direction: column;
+}
+
+.slide-content {
+  width: 100%; 
+  height: 100%;
+  flex: 1;             /* Forces slide to take available space */
+  position: relative;  /* Anchors the background image */
+  
+  /* Hide scrollbars but allow scrolling if needed */
+  scrollbar-width: none;  
+  -ms-overflow-style: none;  
+}
+.slide-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- 3. BACKGROUND IMAGES (THE FIX) --- */
+.collage-bg {
+  position: absolute; 
+  top: 0; 
+  left: 0;
+  width: 100%; 
+  height: 100%; 
+  z-index: 0;
+  pointer-events: none; /* Lets you click text through the image */
+}
+
+.collage-full {
+  width: 100%; 
+  height: 100%; 
+  /* "cover" crops the image to fill the screen without stretching */
+  object-fit: cover; 
+  /* Keeps the center of the photo in view */
+  object-position: center center; 
+  display: block;
+}
+
+/* --- 4. EFFECTS --- */
 .grain-overlay {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -20,63 +70,40 @@ body, html {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* Floating Blobs */
 .blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(60px); /* Soft glow */
+  filter: blur(60px);
   z-index: 1;
   opacity: 0.6;
   pointer-events: none;
 }
 
-/* --- 2. LAYOUT --- */
-.app-container {
-  width: 100vw; height: 100vh;
-  position: relative; overflow: hidden;
-  background: #000;
-}
-
-.slide-content {
-  width: 100%; height: 100%;
-  display: flex; flex-direction: column;
-  justify-content: center; align-items: center;
-  text-align: center; position: relative;
-  padding: 0 20px; 
-  box-sizing: border-box; 
-}
-
-/* Background Images */
-.collage-bg {
-  position: absolute; top: 0; left: 0;
-  width: 100%; height: 100%; z-index: 0;
-}
-.collage-full {
-  width: 100%; height: 100%; object-fit: cover;
-}
-
-/* --- 3. TYPOGRAPHY (Responsive) --- */
+/* --- 5. TYPOGRAPHY (Responsive) --- */
 h1 {
-  font-size: clamp(3rem, 8vw, 5rem);
+  font-size: clamp(3rem, 10vw, 6rem);
   font-weight: 900;
   text-transform: uppercase;
   line-height: 0.95;
   margin: 10px 0;
   text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  position: relative; z-index: 2;
 }
 
 h2 {
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2rem, 6vw, 4rem);
   font-weight: 800;
   text-transform: uppercase;
   margin: 10px 0;
   text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  position: relative; z-index: 2;
 }
 
 p {
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  font-size: clamp(1rem, 3vw, 1.25rem);
   font-weight: 500;
   margin: 10px 0;
+  position: relative; z-index: 2;
 }
 
 .big-num {
@@ -88,15 +115,9 @@ p {
   filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
 }
 
-/* --- 4. COMPONENTS --- */
+/* --- 6. COMPONENTS --- */
 
-/* Stat Boxes (Glassmorphism) */
-.stat-box, .timeline-container, .bar-chart, .word-cloud {
-  width: 100%;
-  max-width: 400px; /* Perfect for mobile */
-  margin: 0 auto;
-}
-
+/* Stat Boxes */
 .stat-box {
   background: rgba(0, 0, 0, 0.4);
   padding: 30px;
@@ -106,6 +127,8 @@ p {
   box-shadow: 0 20px 40px rgba(0,0,0,0.4);
   display: flex; flex-direction: column; align-items: center;
   margin-top: 20px; margin-bottom: 20px;
+  width: 90%; max-width: 400px;
+  position: relative; z-index: 2;
 }
 
 /* Timeline */
@@ -113,12 +136,8 @@ p {
   display: flex; flex-direction: column; gap: 15px;
   margin-top: 20px;
   padding-left: 20px; 
-}
-.timeline-container::before {
-  content: ''; position: absolute;
-  left: 10px; top: 10px; bottom: 10px;
-  width: 3px; background: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
+  width: 90%; max-width: 400px;
+  position: relative; z-index: 2;
 }
 .timeline-item {
   position: relative;
@@ -127,58 +146,34 @@ p {
   text-align: left;
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
-.timeline-item::before {
-  content: ''; position: absolute;
-  left: -27px; top: 50%; transform: translateY(-50%);
-  width: 12px; height: 12px;
-  background: #ff4d4d; border-radius: 50%; border: 3px solid #000;
-}
 .t-date { font-size: 0.8rem; color: #ccc; margin-bottom: 4px; text-transform: uppercase; font-weight: bold;}
 .t-content { font-size: 1rem; font-weight: 600; }
 
 /* Bar Chart */
+.bar-chart { width: 90%; max-width: 400px; margin-top: 30px; position: relative; z-index: 2;}
 .bar-row { display: flex; align-items: center; margin-bottom: 12px; }
 .name { width: 70px; text-align: left; font-weight: bold; }
 .count { width: 50px; text-align: right; font-weight: bold; font-size: 0.9rem; }
 .bar-outer { flex: 1; background: rgba(255,255,255,0.1); height: 12px; border-radius: 6px; margin: 0 10px; overflow: hidden; }
 .bar-inner { height: 100%; }
 
-/* --- UPDATED WORD CLOUD --- */
+/* Word Cloud */
 .word-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px; /* More space between bubbles */
-  max-width: 600px;
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 15px; max-width: 600px; width: 95%;
+  position: relative; z-index: 2;
 }
-
 .word-bubble {
-  background: #fff;
-  color: #000;
-  padding: 15px 25px;   /* Big padding */
-  border-radius: 20px;  /* Soft corners */
+  background: #fff; color: #000;
+  padding: 10px 20px; border-radius: 15px;
   border: 3px solid #000;
-  box-shadow: 6px 6px 0px #000; /* Deep shadow for pop */
-  display: flex;
-  flex-direction: column; /* Stacks word on top of number */
-  align-items: center;
-  min-width: 100px;     /* Ensures they aren't too skinny */
+  box-shadow: 4px 4px 0px #000;
+  display: flex; flex-direction: column; align-items: center;
 }
+.word { font-size: 1.5rem; font-weight: 900; line-height: 1; }
+.word-count { font-size: 0.9rem; font-weight: 700; color: #555; margin-top: 5px; }
 
-.word {
-  font-size: 2rem;      /* Huge text */
-  font-weight: 900;
-  line-height: 1;
-}
-
-.word-count {
-  font-size: 1.2rem;    /* Smaller number below */
-  font-weight: 700;
-  color: #555;
-  margin-top: 5px;
-}
-
-/* Progress Bar (Top) */
+/* Progress Bar */
 .progress-container {
   position: absolute; top: 10px; left: 0; width: 100%;
   display: flex; padding: 0 10px; gap: 4px; z-index: 20;
@@ -186,99 +181,34 @@ p {
 .progress-bar { height: 4px; background: rgba(255,255,255,0.3); flex: 1; border-radius: 2px; }
 .progress-bar.active { background: #fff; box-shadow: 0 0 8px #fff; }
 
-/* --- SCROLLING GALLERY --- */
+/* Gallery Tape */
 .scrolling-gallery {
-  width: 100vw;
-  height: 240px;
+  width: 110vw; height: 240px;
   background: rgba(255,255,255,0.15);
   transform: rotate(-3deg);
-  margin-left: -5vw; /* Pull left to cover rotation edges */
-  width: 110vw;      /* Make wider than screen to hide rotation edges */
-  display: flex;
-  align-items: center;
-  overflow: hidden;  /* Hide the parts that stick out */
-  border-top: 3px solid #fff;
-  border-bottom: 3px solid #fff;
-  position: relative;
-}
-
-.gallery-track {
-  display: flex;
-  gap: 15px;         /* The gap between photos */
-  width: max-content; /* Critical: Forces container to fit all images in one line */
-  padding-right: 15px; /* Adds gap at the very end to match the gap between items */
-}
-
-.gallery-item {
-  width: 160px;
-  height: 200px;
-  border: 5px solid white;
-  border-radius: 5px;
+  margin-left: -5vw;
+  display: flex; align-items: center;
   overflow: hidden;
-  box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
-  background: #222;
-  flex-shrink: 0;    /* Prevents photos from getting squished */
+  border-top: 3px solid #fff; border-bottom: 3px solid #fff;
+  position: relative; z-index: 2;
 }
+.gallery-track { display: flex; gap: 15px; width: max-content; padding-right: 15px; }
+.gallery-item {
+  width: 160px; height: 200px;
+  border: 5px solid white; border-radius: 5px;
+  overflow: hidden; background: #222; flex-shrink: 0;
+}
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; }
 
-.gallery-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-/* --- CUSTOM SLIDER CSS --- */
+/* Slider */
 .love-slider {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 15px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
-  outline: none;
-  transition: 0.2s;
+  -webkit-appearance: none; width: 100%; height: 15px;
+  background: rgba(255, 255, 255, 0.3); border-radius: 10px; outline: none; transition: 0.2s;
+  position: relative; z-index: 5;
 }
-
-/* The "Thumb" (The draggy circle) */
 .love-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 35px;
-  height: 35px;
-  background: #fff;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 0 15px rgba(255, 0, 85, 0.8);
-  border: 4px solid #ff0055;
-}
-
-.love-slider::-moz-range-thumb {
-  width: 35px;
-  height: 35px;
-  background: #fff;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 4px solid #ff0055;
-}
-/* Custom Scrollbar for the Letter */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1); 
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3); 
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5); 
-}
-/* Hide scrollbar for Chrome, Safari and Opera */
-.slide-content::-webkit-scrollbar {
-  display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-.slide-content {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -webkit-appearance: none; appearance: none;
+  width: 35px; height: 35px; background: #fff;
+  border-radius: 50%; cursor: pointer;
+  box-shadow: 0 0 15px rgba(255, 0, 85, 0.8); border: 4px solid #ff0055;
 }
