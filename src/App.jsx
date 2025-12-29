@@ -434,16 +434,17 @@ const slides = [
     )
   },
 
-  // 9. MOOD BOARD (FIXED)
+// 9. MOOD BOARD (INSTANT LOAD FIX)
   {
     id: 'emojis',
-    bg: '#000', 
+    bg: '#000',
     content: () => (
       <SlideLayout bgImage="/chat-photo.jpg" opacity={0.2} color="#8338ec">
         
         <motion.h2 
-          initial={{ y: -50, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
           style={{ fontSize: '3.5rem', textShadow: '0 0 10px #8338ec' }}
         >
           MOODS
@@ -456,32 +457,49 @@ const slides = [
             <motion.div 
               key={i} 
               className="mood-card"
-              // Initial State
-              initial={{ scale: 0, rotate: -20 }} 
-              // Animation to Play
+              // 1. Initial State (Hidden)
+              initial={{ scale: 0, opacity: 0 }} 
+              
+              // 2. Animate to Visible (Pop Up)
               whileInView={{ 
                 scale: 1, 
-                rotate: 0,
-                y: [0, -15, 0] // Floating animation happens here now
-              }} 
-              // Interactions
-              whileHover={{ scale: 1.1, rotate: 5, background: 'rgba(255,255,255,0.2)' }}
+                opacity: 1,
+                rotate: [0, 5, 0], // Gentle wiggle on enter
+              }}
               
-              // ONE SINGLE TRANSITION PROP
+              // 3. Trigger immediately when 10% is visible (Don't wait!)
+              viewport={{ once: true, amount: 0.1 }}
+
+              // 4. Snappy Transition
               transition={{ 
-                scale: { type: "spring", stiffness: 260, damping: 20, delay: i * 0.1 },
-                rotate: { type: "spring", stiffness: 260, damping: 20, delay: i * 0.1 },
-                y: { 
-                  duration: 2 + i, // Random speed
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
-                }
+                type: "spring", 
+                stiffness: 300, 
+                damping: 15, 
+                delay: i * 0.05 // Very tiny delay (fast ripple)
+              }}
+
+              // 5. Separate Loop for Floating (Using 'animate' prop safely)
+              animate={{ 
+                y: [0, -10, 0] 
+              }}
+              // This transition prop applies specifically to the 'animate' block above
+              style={{
+                animation: `float ${2 + i}s ease-in-out infinite` // CSS Fallback for smooth looping
               }}
             >
               {emoji}
             </motion.div>
           ))}
         </div>
+        
+        {/* CSS Keyframes for the smoother float */}
+        <style>{`
+          @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+          }
+        `}</style>
       </SlideLayout>
     )
   },
