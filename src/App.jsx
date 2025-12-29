@@ -15,13 +15,20 @@ const popVariant = {
   visible: { scale: 1, rotate: 0, transition: { type: "spring", stiffness: 260, damping: 20, delay: 0.2 } }
 };
 
-// --- UPDATED LAYOUT COMPONENT ---
+// --- LAYOUT COMPONENT ---
 const SlideLayout = ({ bgImage, children, opacity = 0.4, color = "#e91e63" }) => (
   <div className="slide-content">
-    {/* CSS handles the background image now for perfect mobile fit */}
     {bgImage && (
       <div className="collage-bg">
-        <img src={bgImage} className="collage-full" alt="bg" style={{ opacity: opacity }} />
+        <motion.img 
+          src={bgImage} 
+          className="collage-full" 
+          alt="bg"
+          initial={{ scale: 1 }}
+          animate={{ scale: 1.1 }}
+          transition={{ duration: 10, ease: "linear" }}
+          style={{ opacity: opacity }} 
+        />
       </div>
     )}
 
