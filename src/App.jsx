@@ -434,10 +434,10 @@ const slides = [
     )
   },
 
-  // 9. MOOD BOARD (UPDATED)
+  // 9. MOOD BOARD (FIXED)
   {
     id: 'emojis',
-    bg: '#000', // Dark background makes the glass effect pop
+    bg: '#000', 
     content: () => (
       <SlideLayout bgImage="/chat-photo.jpg" opacity={0.2} color="#8338ec">
         
@@ -452,34 +452,34 @@ const slides = [
         <p style={{ opacity: 0.7, marginBottom: '20px' }}>The 4 stages of Us:</p>
 
         <div className="mood-grid">
-          {/* EMOJI LIST - Add more if you want */}
           {['😭', '❤️', '💀', '🥺'].map((emoji, i) => (
             <motion.div 
-  key={i} 
-  className="mood-card"
-  initial={{ scale: 0, rotate: -20 }} 
-  whileInView={{ scale: 1, rotate: 0 }} 
-  whileHover={{ scale: 1.1, rotate: 5, background: 'rgba(255,255,255,0.2)' }}
-  animate={{ 
-    y: [0, -15, 0], // The floating up and down movement
-  }}
-  transition={{ 
-    // 1. Entrance Animation (Spring pop-up)
-    type: "spring", 
-    stiffness: 260, 
-    damping: 20, 
-    delay: i * 0.1,
-    
-    // 2. Continuous Floating Animation (Looping)
-    y: { 
-      duration: 2 + i, // Randomizes speed slightly based on index
-      repeat: Infinity, 
-      ease: "easeInOut" 
-    }
-  }}
->
-  {emoji}
-</motion.div>
+              key={i} 
+              className="mood-card"
+              // Initial State
+              initial={{ scale: 0, rotate: -20 }} 
+              // Animation to Play
+              whileInView={{ 
+                scale: 1, 
+                rotate: 0,
+                y: [0, -15, 0] // Floating animation happens here now
+              }} 
+              // Interactions
+              whileHover={{ scale: 1.1, rotate: 5, background: 'rgba(255,255,255,0.2)' }}
+              
+              // ONE SINGLE TRANSITION PROP
+              transition={{ 
+                scale: { type: "spring", stiffness: 260, damping: 20, delay: i * 0.1 },
+                rotate: { type: "spring", stiffness: 260, damping: 20, delay: i * 0.1 },
+                y: { 
+                  duration: 2 + i, // Random speed
+                  repeat: Infinity, 
+                  ease: "easeInOut" 
+                }
+              }}
+            >
+              {emoji}
+            </motion.div>
           ))}
         </div>
       </SlideLayout>
