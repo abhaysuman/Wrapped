@@ -282,48 +282,34 @@ p {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
-/* --- UPDATED VIBE CHECK (Sticker Style) --- */
-.word-cloud {
+/* --- MOOD BOARD (Glass Style) --- */
+.mood-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.mood-card {
+  background: rgba(255, 255, 255, 0.1); /* Frosted Glass */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  width: 140px;
+  height: 140px;
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
-  align-items: center;
-  gap: 20px;
-  max-width: 90%;
-  padding: 20px;
-  perspective: 1000px; /* Adds depth for 3D effects */
-}
-
-.word-bubble {
-  padding: 12px 25px;
-  border-radius: 50px; /* Fully rounded pill shape */
-  border: 3px solid #000;
-  box-shadow: 5px 5px 0px rgba(0,0,0,1); /* Hard shadow */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  font-size: 5rem; /* Huge Emoji */
   cursor: pointer;
-  background: #fff; /* Default, will be overridden by inline styles */
-  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s ease;
 }
 
-.word-bubble:active {
-  transform: scale(0.95) !important;
-  box-shadow: 2px 2px 0px rgba(0,0,0,1);
-}
-
-.word {
-  font-size: 1.8rem;
-  font-weight: 900;
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: -1px;
-}
-
-.word-count {
-  font-size: 0.85rem;
-  font-weight: 700;
-  opacity: 0.8;
-  margin-top: 4px;
-  font-family: monospace;
+/* Hover Effect: Glow */
+.mood-card:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
 }

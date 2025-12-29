@@ -434,74 +434,56 @@ const slides = [
     )
   },
 
-  // 10. VIBE CHECK (STICKER BOMB STYLE)
+  // 9. MOOD BOARD (UPDATED)
   {
-    id: 'words',
-    bg: '#FFD166', // Bright yellow background for contrast
-    content: () => {
-      // Pop colors for the stickers
-      const colors = ['#ff0055', '#06d6a0', '#118ab2', '#ffd166', '#ef476f', '#fff'];
-      
-      return (
-        <SlideLayout bgImage="/bg-words.jpg" opacity={0.1} color="#06d6a0">
-          
-          {/* Glitchy Title Effect */}
-          <motion.h2 
-            animate={{ skewX: [-5, 5, -5], scale: [1, 1.05, 1] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-            style={{ 
-              fontSize: '3.5rem', 
-              marginBottom: '40px', 
-              textShadow: '4px 4px 0px #000',
-              color: '#fff',
-              transform: 'rotate(-3deg)'
-            }}
-          >
-            VIBE CHECK
-          </motion.h2>
-          
-          <div className="word-cloud">
-            {data?.top_words && data.top_words.map((item, index) => {
-              // Pick a random color and rotation for each sticker
-              const color = colors[index % colors.length];
-              const rotation = (index % 2 === 0 ? 1 : -1) * (Math.random() * 15 + 5); 
-              
-              return (
-                <motion.div 
-                  key={index} 
-                  className="word-bubble" 
-                  style={{ 
-                    backgroundColor: color, 
-                    color: color === '#000' ? '#fff' : '#000', // Ensure text is readable
-                    transform: `rotate(${rotation}deg)` // Initial chaotic rotation
-                  }}
-                  initial={{ scale: 0, rotate: rotation + 180 }} 
-                  whileInView={{ scale: 1, rotate: rotation }} 
-                  whileHover={{ scale: 1.2, rotate: 0, zIndex: 10 }}
-                  // Floating Animation
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ 
-                    type: "spring", 
-                    delay: index * 0.1, // Stagger effect
-                    y: { duration: 2, repeat: Infinity, delay: Math.random() } // Random float speed
-                  }}
-                >
-                  <span className="word">{item.text}</span>
-                  <span className="word-count" style={{ color: '#000' }}>
-                    {item.value}x
-                  </span>
-                </motion.div>
-              );
-            })}
-          </div>
+    id: 'emojis',
+    bg: '#000', // Dark background makes the glass effect pop
+    content: () => (
+      <SlideLayout bgImage="/chat-photo.jpg" opacity={0.2} color="#8338ec">
+        
+        <motion.h2 
+          initial={{ y: -50, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          style={{ fontSize: '3.5rem', textShadow: '0 0 10px #8338ec' }}
+        >
+          MOODS
+        </motion.h2>
+        
+        <p style={{ opacity: 0.7, marginBottom: '20px' }}>The 4 stages of Us:</p>
 
-          <p style={{ marginTop: '50px', fontStyle: 'italic', opacity: 0.7 }}>
-            (Tap a sticker)
-          </p>
-
-        </SlideLayout>
-      );
+        <div className="mood-grid">
+          {/* EMOJI LIST - Add more if you want */}
+          {['😭', '❤️', '💀', '🥺'].map((emoji, i) => (
+            <motion.div 
+  key={i} 
+  className="mood-card"
+  initial={{ scale: 0, rotate: -20 }} 
+  whileInView={{ scale: 1, rotate: 0 }} 
+  whileHover={{ scale: 1.1, rotate: 5, background: 'rgba(255,255,255,0.2)' }}
+  animate={{ 
+    y: [0, -15, 0], // The floating up and down movement
+  }}
+  transition={{ 
+    // 1. Entrance Animation (Spring pop-up)
+    type: "spring", 
+    stiffness: 260, 
+    damping: 20, 
+    delay: i * 0.1,
+    
+    // 2. Continuous Floating Animation (Looping)
+    y: { 
+      duration: 2 + i, // Randomizes speed slightly based on index
+      repeat: Infinity, 
+      ease: "easeInOut" 
     }
+  }}
+>
+  {emoji}
+</motion.div>
+          ))}
+        </div>
+      </SlideLayout>
+    )
   },
 
   // 10. WORD CLOUD (UPDATED)
